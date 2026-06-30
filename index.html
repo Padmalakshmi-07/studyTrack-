@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyTrack — Student Activity Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!--
+    SVG sprite: all icon symbols + progress-ring gradient live here.
+    Icons are Feather-style (MIT), stroke="currentColor" so they
+    inherit color from their container.
+  -->
+  <svg style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#6366f1"/>
+        <stop offset="100%" stop-color="#06b6d4"/>
+      </linearGradient>
+
+      <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </symbol>
+
+      <symbol id="i-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </symbol>
+
+      <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </symbol>
+
+      <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="12" r="6"/>
+        <circle cx="12" cy="12" r="2"/>
+      </symbol>
+
+      <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </symbol>
+
+      <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1"    x2="12"    y2="3"/>
+        <line x1="12" y1="21"   x2="12"    y2="23"/>
+        <line x1="4.22" y1="4.22"  x2="5.64"  y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1"  y1="12"   x2="3"     y2="12"/>
+        <line x1="21" y1="12"   x2="23"    y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64"  y2="18.36"/>
+        <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"/>
+      </symbol>
+
+      <symbol id="i-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 20h9"/>
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+      </symbol>
+
+      <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </symbol>
+
+      <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"/>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      </symbol>
+
+      <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+      </symbol>
+
+      <symbol id="i-inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+        <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+      </symbol>
+
+      <symbol id="i-bar-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6"  y1="20" x2="6"  y2="14"/>
+      </symbol>
+
+      <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="8"  y1="6"  x2="21" y2="6"/>
+        <line x1="8"  y1="12" x2="21" y2="12"/>
+        <line x1="8"  y1="18" x2="21" y2="18"/>
+        <line x1="3"  y1="6"  x2="3.01" y2="6"/>
+        <line x1="3"  y1="12" x2="3.01" y2="12"/>
+        <line x1="3"  y1="18" x2="3.01" y2="18"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <div class="brand-icon">
+        <svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>
+      </div>
+      <span class="brand-name">StudyTrack</span>
+    </div>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home"       class="nav-link active" data-section="home">Home</a></li>
+      <li><a href="#activities" class="nav-link"        data-section="activities">Activities</a></li>
+      <li><a href="#progress"   class="nav-link"        data-section="progress">Progress</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="theme-btn" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <svg class="icon" aria-hidden="true">
+          <use id="themeIconHref" href="#i-moon"/>
+        </svg>
+      </button>
+      <button class="hamburger" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== HOME ===== -->
+  <section id="home" class="section active">
+    <div class="hero">
+      <div class="hero-content">
+        <span class="hero-badge">Your Learning Dashboard</span>
+        <h1 class="hero-title">
+          Track Your<br>
+          <span class="gradient-text">Learning Journey</span>
+        </h1>
+        <p class="hero-subtitle">
+          Stay organized, motivated, and achieve your academic goals —
+          one activity at a time.
+        </p>
+
+        <div class="quote-card">
+          <div class="quote-mark">"</div>
+          <p class="quote-text" id="quoteText">Loading quote…</p>
+          <p class="quote-author" id="quoteAuthor"></p>
+          <button class="quote-refresh" id="quoteRefresh" title="New quote" aria-label="Refresh quote">
+            <svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg>
+          </button>
+        </div>
+
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-lg" id="startTrackingBtn">
+            Start Tracking <span class="btn-arrow">&#8594;</span>
+          </button>
+          <button class="btn btn-outline btn-lg" id="viewProgressBtn">View Progress</button>
+        </div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-icon primary-icon">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-book"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-num" id="totalActivities">0</div>
+            <div class="stat-lbl">Total Tasks</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon success-icon">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-check-circle"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-num success-num" id="completedActivities">0</div>
+            <div class="stat-lbl">Completed</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon warning-icon">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-clock"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-num warning-num" id="pendingActivities">0</div>
+            <div class="stat-lbl">Pending</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon info-icon">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="#i-target"/></svg>
+          </div>
+          <div class="stat-body">
+            <div class="stat-num info-num" id="homeProgressPct">0%</div>
+            <div class="stat-lbl">Progress</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ACTIVITIES ===== -->
+  <section id="activities" class="section">
+    <div class="section-header">
+      <div>
+        <h2>My Activities</h2>
+        <p class="section-sub">Manage your daily learning tasks</p>
+      </div>
+      <div class="bulk-btns">
+        <button class="btn btn-ghost btn-sm" id="clearCompletedBtn">Clear Completed</button>
+        <button class="btn btn-primary btn-sm" id="markAllBtn">Mark All Done</button>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-row">
+        <div class="input-wrap">
+          <svg class="input-prefix-svg" aria-hidden="true"><use href="#i-pen"/></svg>
+          <input
+            type="text"
+            id="activityInput"
+            class="form-input"
+            placeholder="Enter a new activity…"
+            maxlength="120"
+            autocomplete="off"
+          />
+        </div>
+        <select id="categorySelect" class="form-select">
+          <option value="study">Study</option>
+          <option value="assignment">Assignment</option>
+          <option value="exam">Exam Prep</option>
+          <option value="project">Project</option>
+          <option value="reading">Reading</option>
+          <option value="practice">Practice</option>
+          <option value="revision">Revision</option>
+        </select>
+        <button class="btn btn-primary" id="addActivityBtn">Add Task</button>
+      </div>
+    </div>
+
+    <div class="search-filter">
+      <div class="search-box">
+        <svg class="search-prefix-svg" aria-hidden="true"><use href="#i-search"/></svg>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Search activities…"
+          autocomplete="off"
+          aria-label="Search activities"
+        />
+        <button class="search-clear" id="searchClear" aria-label="Clear search" style="display:none">&#10005;</button>
+      </div>
+      <div class="filter-tabs" role="tablist">
+        <button class="ftab active" data-filter="all"       role="tab">All     <span class="fcnt" id="cntAll">0</span></button>
+        <button class="ftab"        data-filter="pending"   role="tab">Pending <span class="fcnt" id="cntPending">0</span></button>
+        <button class="ftab"        data-filter="completed" role="tab">Done    <span class="fcnt" id="cntDone">0</span></button>
+      </div>
+    </div>
+
+    <div class="activity-list" id="activityList"></div>
+
+    <div class="empty-state" id="emptyState" style="display:none">
+      <svg class="empty-svg" aria-hidden="true"><use href="#i-inbox"/></svg>
+      <h3>No activities found</h3>
+      <p>Add a new task above or try a different search.</p>
+    </div>
+  </section>
+
+  <!-- ===== PROGRESS ===== -->
+  <section id="progress" class="section">
+    <div class="section-header">
+      <div>
+        <h2>My Progress</h2>
+        <p class="section-sub">Track your learning journey in real time</p>
+      </div>
+    </div>
+
+    <div class="progress-overview">
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="ring-bg"   cx="60" cy="60" r="50"/>
+          <circle class="ring-fill" cx="60" cy="60" r="50" id="progressRingFill" stroke="url(#ringGradient)"/>
+        </svg>
+        <div class="ring-label">
+          <div class="ring-pct" id="progressPercent">0%</div>
+          <div class="ring-sub">Complete</div>
+        </div>
+      </div>
+
+      <div class="prog-stats">
+        <div class="pstat">
+          <div class="pstat-val" id="progTotal">0</div>
+          <div class="pstat-lbl">Total Tasks</div>
+        </div>
+        <div class="pstat">
+          <div class="pstat-val success-num" id="progCompleted">0</div>
+          <div class="pstat-lbl">Completed</div>
+        </div>
+        <div class="pstat">
+          <div class="pstat-val warning-num" id="progPending">0</div>
+          <div class="pstat-lbl">Pending</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pb-card">
+      <div class="pb-header">
+        <span>Overall Progress</span>
+        <span class="pb-pct" id="progressBarPct">0%</span>
+      </div>
+      <div class="pb-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="pbTrack">
+        <div class="pb-fill" id="progressBarFill">
+          <div class="pb-shimmer"></div>
+        </div>
+      </div>
+      <div class="pb-footer">
+        <span id="progRemaining">0 tasks remaining</span>
+        <span id="progDoneLabel">0 done</span>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-hd">
+          <svg class="icon icon-sm" aria-hidden="true"><use href="#i-bar-chart"/></svg>
+          By Category
+        </div>
+        <div id="categoryBreakdown" class="cat-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <svg class="icon icon-sm" aria-hidden="true"><use href="#i-list"/></svg>
+          Activity Log
+        </div>
+        <div id="activityLog" class="log-list"></div>
+      </div>
+    </div>
+  </section>
+  <!-- FOOTER START -->
+<footer class="footer">
+    <div class="footer-content">
+        <h3>StudyTrack</h3>
+        <p>Student Activity Tracker</p>
+        <p>Developed by <strong>D. Padmalakshmi</strong></p>
+        <p>Naan Mudhalvan Hackathon Finals 2026</p>
+    </div>
+</footer>
+<!-- FOOTER END -->
+
+  <script src="app.js"></script>
+</body>
+</html>
